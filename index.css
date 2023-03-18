@@ -1,0 +1,12 @@
+*{
+box-sizing: border-box;
+padding: 0;
+margin: 0;
+}
+.plus_icon{
+    margin-top: 0.2rem;
+}
+body {
+    /* #ebf2ff; */
+    background-color: #ebf2ff !important;
+  }
