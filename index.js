@@ -7,7 +7,7 @@ let modal_body_content = document.querySelector(".modal_body_content");
 let open_modal_contant = document.querySelector(".open_task_modal");
 
 const create_cards = ({ id, url, title, type, decription }) => `
-<div class="col-md-4" id=${id}>
+<div class=" col-lg-4 col-md-6 col-sm-6 mt-5 d-flex justify-content-center" id=${id}>
   <div class="card" style="width:25rem;">
     <div class="card-header d-flex justify-content-end gap-2">
         <button type="button" class="btn btn-outline-info edit_icon " name=${id}  onclick="editTask.apply(this,arguments)"><i class="fas fa-pencil-alt" name=${id}></i></button>
@@ -30,28 +30,18 @@ const create_cards = ({ id, url, title, type, decription }) => `
  </div> 
 </div>
 `;
-// card_content.innerHTML = create_cards(1, "hello", "work", "pooja parmar");
 
 // data store in local storage
 const updateLocalstorage = () => {
   const tasklList = state.task;
   localStorage.setItem("task", JSON.stringify(tasklList));
-  // console.log("tasklist", tasklList);
-  // localStorage.setItem(
-  //   "task",
-  //   JSON.stringify({
-  //     tasks: state.task,
-  //   })
-  // );
 };
 
 //parse data from local storage
 const retriveData = (event) => {
   const retrivedata = JSON.parse(localStorage.getItem("task"));
   // console.log(retrivedata);
-
   if (retrivedata) state.task = retrivedata;
-
   state.task.map((cardData) => {
     card_content.insertAdjacentHTML("beforeend", create_cards(cardData));
   });
@@ -69,12 +59,14 @@ const save_add_item = (event) => {
     type: document.getElementById("Task_type").value,
     decription: document.getElementById("taskDesc").value,
   };
+  if (input.title === "" || input.type === "" || input.decription === "")
+    return alert("please fill all fields :)");
 
   card_content.insertAdjacentHTML("beforeend", create_cards({ ...input, id }));
   console.log(card_content);
 
   state.task.push({ ...input, id });
-  // console.log("satte", state.task);
+
   updateLocalstorage();
 
   add_modal_form.reset();
@@ -99,7 +91,6 @@ const open_task_modal = ({ id, title, decription, url, type }) => {
 };
 
 // open task
-
 const open_task_content = (e) => {
   if (!e) e = window.event;
 
@@ -109,7 +100,6 @@ const open_task_content = (e) => {
 };
 
 ///Delete task
-
 const deleteTaks = (e) => {
   if (!e) e = window.event;
 
@@ -131,55 +121,26 @@ const deleteTaks = (e) => {
     : e.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
         e.target.parentNode.parentNode.parentNode.parentNode
       );
-
-  // if (type === "BUTTON") {
-  //   // console.log(e.target.parentNode.parentNode.parentNode.parentNode);
-  //   // return e.target.parentNode.parentNode.parentNode.parentNode;
-  //   console.log(
-  //     e.target.parentElement.parentElement.parentElement.parentElement
-  //   );
-  //   return e.target.parentElement.parentElement.parentElement.parentElement.removeChild(
-  //     e.target.parentElement.parentElement.parentElement
-  //   );
-  // } else if (type === "I") {
-  //   return e.target.parentNode.parentNode.parentNode.parentNode.parentNode.removeChild(
-  //     e.target.parentNode.parentNode.parentNode.parentNode
-  //   );
-  // }
 };
 
 // Edit Task
-
 const editTask = (e) => {
   if (!e) e = window.event;
   const targetId = e.target.getAttribute("name");
-  // console.log(targetId);
 
   const type = e.target.tagName;
-  // console.log(type);
 
   const parentnode =
     type === "BUTTON"
       ? e.target.parentNode.parentNode.parentNode
       : e.target.parentNode.parentNode.parentNode.parentNode;
-  // if (type === "BUTTON") {
-  //   parentnode = e.target.parentNode.parentNode.parentNode;
-  //   // console.log(e.target.parentNode.parentNode.parentNode);
-  // } else if (type === "I") {
-  //   parentnode = e.target.parentNode.parentNode.parentNode.parentNode;
-  //   console.log(e.target.parentNode.parentNode.parentNode.parentNode);
-  // }
 
   // console.log(parentnode.childNodes);
 
   const taskTitle = parentnode.childNodes[1].childNodes[3].childNodes[3];
-  // console.log(taskTitle);
   const taskType = parentnode.childNodes[1].childNodes[3].childNodes[7];
-  // console.log(taskType);
   const taskDesc = parentnode.childNodes[1].childNodes[3].childNodes[5];
-  // console.log(taskDesc);
   const button = parentnode.childNodes[1].childNodes[5].childNodes[1];
-  // console.log(button);
 
   button.setAttribute("onclick", "saveEdit.apply(this,arguments)");
   button.innerHTML = "Save Changes";
@@ -197,26 +158,19 @@ const saveEdit = (e) => {
 
   const targetId = e.target.id;
 
-  // console.log(edit);
-
   const parentnode = e.target.parentNode.parentNode.parentNode;
   // console.log(parentnode);
 
   const taskTitle = parentnode.childNodes[1].childNodes[3].childNodes[3];
-  // console.log(taskTitle);
   const taskType = parentnode.childNodes[1].childNodes[3].childNodes[7];
-  // console.log(taskType);
   const taskDesc = parentnode.childNodes[1].childNodes[3].childNodes[5];
-  // console.log(taskDesc);
   const button = parentnode.childNodes[1].childNodes[5].childNodes[1];
-  // console.log(button);
 
   const saveData = {
     taskTitle: taskTitle.innerHTML,
     taskType: taskType.innerHTML,
     taskDesc: taskDesc.innerHTML,
   };
-  // console.log(saveData);
 
   let stateTaskcopy = state.task;
 
@@ -252,23 +206,18 @@ const searchData = (e) => {
 
   const searchitem = document.getElementById("search_input").value;
   console.log("item", searchitem);
+
   while (card_content.firstChild) {
     console.log("firstchild", card_content.firstChild);
     const removedata = card_content.removeChild(card_content.firstChild);
     console.log("remove", removedata);
   }
   const result = state.task.filter(({ title }) =>
-    // console.log("title", title);
-    // console.log(
-    //   "include >>>",
-    //   title.toLowerCase().includes(searchitem.toLowerCase())
-    // );
     title.toLowerCase().includes(searchitem.toLowerCase())
   );
 
   result.map((data) =>
-    // console.log("data>>", data)
     card_content.insertAdjacentHTML("beforeend", create_cards(data))
   );
-  console.log("result", result);
+  // console.log("result", result);
 };
