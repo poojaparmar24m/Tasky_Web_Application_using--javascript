@@ -51,6 +51,7 @@ const retriveData = (event) => {
 const save_add_item = (event) => {
   const id = `${Date.now()}`;
   let add_modal_form = document.getElementById("add_modal_form");
+
   // console.log("id>>", id);
 
   const input = {
